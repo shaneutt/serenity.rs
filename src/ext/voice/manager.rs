@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::sync::mpsc::Sender as MpscSender;
 use super::{Handler, Target};
-use ::client::gateway::GatewayStatus;
+use ::gateway::GatewayStatus;
 use ::model::{ChannelId, GuildId, UserId};
 
 /// A manager is a struct responsible for managing [`Handler`]s which belong to

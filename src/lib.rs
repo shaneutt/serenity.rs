@@ -145,7 +145,6 @@
 //! [examples]: https://github.com/zeyla/serenity.rs/tree/master/examples
 //! [gateway docs]: client/gateway/index.html
 #![allow(doc_markdown, inline_always, unknown_lints)]
-#![doc(html_logo_url = "https://docs.austinhellyer.me/serenity.rs/docs_header.png")]
 #![warn(enum_glob_use, if_not_else)]
 
 #[macro_use]
@@ -171,16 +170,25 @@ extern crate opus;
 extern crate sodiumoxide;
 
 #[macro_use]
-pub mod utils;
-
-pub mod client;
-pub mod ext;
-pub mod model;
-pub mod prelude;
-
-mod constants;
-mod error;
 mod internal;
 
-pub use client::Client;
+pub mod prelude;
+
+#[cfg(feature="client")]
+pub mod client;
+#[cfg(any(feature="cache", feature="framework", feature="voice"))]
+pub mod ext;
+#[cfg(feature="gateway")]
+pub mod gateway;
+#[cfg(feature="rest")]
+pub mod rest;
+
+mod constants;
+mod core;
+mod error;
+
+pub use core::{CoreError, model, utils};
 pub use error::{Error, Result};
+
+#[cfg(feature="client")]
+pub use client::Client;

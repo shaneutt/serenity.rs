@@ -1,8 +1,9 @@
 use std::collections::HashSet;
 use std::default::Default;
 use super::command::PrefixCheck;
-use ::client::{Context, rest};
+use ::client::Context;
 use ::model::{GuildId, UserId};
+use ::rest;
 
 /// Account type used for configuration.
 pub enum AccountType {

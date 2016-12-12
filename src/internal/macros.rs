@@ -90,6 +90,53 @@ macro_rules! feature_cache_disabled {
     }
 }
 
+// Enable/disable check for client + cache
+#[cfg(all(feature="cache", feature="client"))]
+macro_rules! feature_ccache {
+    ($enabled:block else $disabled:block) => {
+        {
+            $enabled
+        }
+    }
+}
+
+#[cfg(not(all(feature="cache", feature="client")))]
+macro_rules! feature_ccache {
+    ($enabled:block else $disabled:block) => {
+        {
+            $disabled
+        }
+    }
+}
+
+#[cfg(all(feature="cache", feature="client"))]
+macro_rules! feature_ccache_enabled {
+    ($enabled:block) => {
+        {
+            $enabled
+        }
+    }
+}
+
+#[cfg(not(all(feature="cache", feature="client")))]
+macro_rules! feature_ccache_enabled {
+    ($enabled:block) => {{}}
+}
+
+#[cfg(all(feature="cache", feature="client"))]
+macro_rules! feature_ccache_disabled {
+    ($disabled:block) => {{}}
+}
+
+#[cfg(not(all(feature="cache", feature="client")))]
+macro_rules! feature_ccache_disabled {
+    ($disabled:block) => {
+        {
+            $disabled
+        }
+    }
+}
+
 // Enable/disable check for framework
 #[cfg(feature="framework")]
 macro_rules! feature_framework {

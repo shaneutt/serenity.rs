@@ -5,7 +5,7 @@ use websocket::message::{Message as WsMessage, Type as WsType};
 use websocket::stream::WebSocketStream;
 use websocket::ws::receiver::Receiver as WsReceiver;
 use websocket::ws::sender::Sender as WsSender;
-use ::client::gateway::GatewayError;
+use ::gateway::GatewayError;
 use ::internal::prelude::*;
 
 pub trait ReceiverExt {
@@ -18,7 +18,8 @@ pub trait SenderExt {
 }
 
 impl ReceiverExt for Receiver<WebSocketStream> {
-    fn recv_json<F, T>(&mut self, decode: F) -> Result<T> where F: FnOnce(Value) -> Result<T> {
+    fn recv_json<F, T>(&mut self, decode: F) -> Result<T>
+        where F: FnOnce(Value) -> Result<T> {
         let message: WsMessage = self.recv_message()?;
 
         if message.opcode == WsType::Close {

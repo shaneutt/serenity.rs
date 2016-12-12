@@ -1,6 +1,6 @@
 use super::{Invite, RichInvite};
-use ::client::rest;
 use ::internal::prelude::*;
+use ::rest;
 
 #[cfg(feature="cache")]
 use super::permissions;

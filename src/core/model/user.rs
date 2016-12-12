@@ -22,15 +22,15 @@ use super::Message;
 #[cfg(all(feature = "cache", feature = "methods"))]
 use super::Member;
 #[cfg(feature="methods")]
+use super::GuildInfo;
+#[cfg(feature="methods")]
 use time::Timespec;
 #[cfg(feature="methods")]
-use ::client::rest::{self, GuildPagination};
-#[cfg(feature="methods")]
-use super::GuildInfo;
+use ::rest::{self, GuildPagination};
 #[cfg(feature="methods")]
 use ::utils::builder::EditProfile;
 
-#[cfg(feature="cache")]
+#[cfg(all(feature="cache", feature="client"))]
 use ::client::CACHE;
 
 impl CurrentUser {
@@ -105,7 +105,7 @@ impl User {
     }
 
     /// Gets user as `Member` of a guild.
-    #[cfg(all(feature="cache", feature="methods"))]
+    #[cfg(all(feature="cache", feature="client", feature="methods"))]
     pub fn member<G>(&self, guild_id: G) -> Option<Member>
         where G: Into<GuildId> {
         let cache = CACHE.read().unwrap();
@@ -205,7 +205,7 @@ impl User {
                 guild.roles.get(&role_id).is_some()
             },
             GuildContainer::Id(guild_id) => {
-                feature_cache! {{
+                feature_ccache! {{
                     let cache = CACHE.read().unwrap();
 
                     cache.get_role(guild_id, role_id).is_some()

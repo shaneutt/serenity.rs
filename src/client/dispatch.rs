@@ -3,8 +3,8 @@ use std::thread;
 use super::event_store::EventStore;
 use super::login_type::LoginType;
 use super::Context;
-use super::gateway::Shard;
 use typemap::ShareMap;
+use ::gateway::Shard;
 use ::model::event::Event;
 use ::model::{ChannelId, Message};
 

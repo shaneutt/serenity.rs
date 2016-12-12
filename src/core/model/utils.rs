@@ -14,6 +14,7 @@ use super::{
     UserId,
     VoiceState,
 };
+use ::core::CoreError;
 use ::internal::prelude::*;
 use ::utils::{decode_array, into_array};
 
@@ -27,11 +28,11 @@ use ::ext::cache::ChannelRef;
 #[macro_escape]
 macro_rules! req {
     ($opt:expr) => {
-        $opt.ok_or(Error::Decode(concat!("Type mismatch in model:",
-                                              line!(),
-                                              ": ",
-                                              stringify!($opt)),
-                                      Value::Null))?
+        $opt.ok_or(Error::Core(CoreError::Decode(concat!("Type mismatch in model:",
+                                                         line!(),
+                                                         ": ",
+                                                         stringify!($opt)),
+                                                 Value::Null)))?
     }
 }
 
@@ -48,7 +49,8 @@ pub fn decode_emojis(value: Value) -> Result<HashMap<EmojiId, Emoji>> {
 pub fn decode_experiments(value: Value) -> Result<Vec<Vec<u64>>> {
     let array = match value {
         Value::Array(v) => v,
-        value => return Err(Error::Decode("Expected experiment array", value)),
+        value => return Err(Error::Core(CoreError::Decode("Expected experiment array",
+                                                          value))),
     };
 
     let mut experiments: Vec<Vec<u64>> = vec![];
@@ -56,7 +58,8 @@ pub fn decode_experiments(value: Value) -> Result<Vec<Vec<u64>>> {
     for arr in array {
         let arr = match arr {
             Value::Array(v) => v,
-            value => return Err(Error::Decode("Expected experiment's array", value)),
+            value => return Err(Error::Core(CoreError::Decode("Expected experiments array",
+                                                              value))),
         };
 
         let mut items: Vec<u64> = vec![];
@@ -65,7 +68,8 @@ pub fn decode_experiments(value: Value) -> Result<Vec<Vec<u64>>> {
             items.push(match item {
                 Value::I64(v) => v as u64,
                 Value::U64(v) => v,
-                value => return Err(Error::Decode("Expected experiment u64", value)),
+                value => return Err(Error::Core(CoreError::Decode("Expected experiment u64",
+                                                                  value))),
             });
         }
 
@@ -81,10 +85,10 @@ pub fn decode_id(value: Value) -> Result<u64> {
         Value::I64(num) => Ok(num as u64),
         Value::String(text) => match text.parse::<u64>() {
             Ok(num) => Ok(num),
-            Err(_) => Err(Error::Decode("Expected numeric ID",
-                                        Value::String(text)))
+            Err(_) => Err(Error::Core(CoreError::Decode("Expected numeric ID",
+                                                        Value::String(text))))
         },
-        value => Err(Error::Decode("Expected numeric ID", value))
+        value => Err(Error::Core(CoreError::Decode("Expected numeric ID", value)))
     }
 }
 
@@ -105,8 +109,8 @@ pub fn decode_notes(value: Value) -> Result<HashMap<UserId, String>> {
 
     for (key, value) in into_map(value).unwrap_or(BTreeMap::default()) {
         let id = UserId(key.parse::<u64>()
-            .map_err(|_| Error::Decode("Invalid user id in notes",
-                                       Value::String(key)))?);
+            .map_err(|_| Error::Core(CoreError::Decode("Invalid user id in notes",
+                                       Value::String(key))))?);
 
         notes.insert(id, into_string(value)?);
     }
@@ -178,9 +182,9 @@ pub fn decode_shards(value: Value) -> Result<[u8; 2]> {
 
     Ok([
         req!(array.get(0)
-            .ok_or(Error::Client(ClientError::InvalidShards))?.as_u64()) as u8,
+            .ok_or(Error::Core(CoreError::InvalidShards))?.as_u64()) as u8,
         req!(array.get(1)
-            .ok_or(Error::Client(ClientError::InvalidShards))?.as_u64()) as u8,
+            .ok_or(Error::Core(CoreError::InvalidShards))?.as_u64()) as u8,
     ])
 }
 
@@ -210,14 +214,14 @@ pub fn into_string(value: Value) -> Result<String> {
         Value::String(s) => Ok(s),
         Value::U64(v) => Ok(v.to_string()),
         Value::I64(v) => Ok(v.to_string()),
-        value => Err(Error::Decode("Expected string", value)),
+        value => Err(Error::Core(CoreError::Decode("Expected string", value))),
     }
 }
 
 pub fn into_map(value: Value) -> Result<BTreeMap<String, Value>> {
     match value {
         Value::Object(m) => Ok(m),
-        value => Err(Error::Decode("Expected object", value)),
+        value => Err(Error::Core(CoreError::Decode("Expected object", value))),
     }
 }
 
@@ -226,10 +230,11 @@ pub fn into_u64(value: Value) -> Result<u64> {
         Value::I64(v) => Ok(v as u64),
         Value::String(v) => match v.parse::<u64>() {
             Ok(v) => Ok(v),
-            Err(_why) => Err(Error::Decode("Expected valid u64", Value::String(v))),
+            Err(_why) => Err(Error::Core(CoreError::Decode("Expected valid u64",
+                                                           Value::String(v)))),
         },
         Value::U64(v) => Ok(v),
-        value => Err(Error::Decode("Expected u64", value)),
+        value => Err(Error::Core(CoreError::Decode("Expected u64", value))),
     }
 }
 
@@ -246,16 +251,17 @@ pub fn decode_discriminator(value: Value) -> Result<u16> {
         Value::U64(v) => Ok(v as u16),
         Value::String(s) => match s.parse::<u16>() {
             Ok(v) => Ok(v),
-            Err(_why) => Err(Error::Decode("Error parsing discriminator as u16",
-                                           Value::String(s))),
+            Err(_why) => Err(Error::Core(CoreError::Decode("Error parsing discriminator as u16",
+                                                           Value::String(s)))),
         },
-        value => Err(Error::Decode("Expected string or u64", value)),
+        value => Err(Error::Core(CoreError::Decode("Expected string or u64", value))),
     }
 }
 
 pub fn remove(map: &mut BTreeMap<String, Value>, key: &str) -> Result<Value> {
     map.remove(key).ok_or_else(|| {
-        Error::Decode("Unexpected absent key", Value::String(key.into()))
+        Error::Core(CoreError::Decode("Unexpected absent key",
+                                      Value::String(key.into())))
     })
 }
 

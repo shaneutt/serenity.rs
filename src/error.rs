@@ -5,8 +5,12 @@ use std::io::Error as IoError;
 use std::error::Error as StdError;
 use std::fmt::{self, Display, Error as FormatError};
 use websocket::result::WebSocketError;
-use ::client::gateway::GatewayError;
+use ::core::CoreError;
+
+#[cfg(feature="client")]
 use ::client::ClientError;
+#[cfg(feature="gateway")]
+use ::gateway::GatewayError;
 #[cfg(feature="voice")]
 use opus::Error as OpusError;
 #[cfg(feature="voice")]
@@ -36,35 +40,25 @@ pub type Result<T> = ::std::result::Result<T, Error>;
 /// [`Result`]: type.Result.html
 #[derive(Debug)]
 pub enum Error {
-    /// A [rest] or [client] error.
-    ///
-    /// [client]: client/index.html
-    /// [rest]: client/rest/index.html
-    Client(ClientError),
-    /// An error with the WebSocket [`Gateway`].
-    ///
-    /// [`Gateway`]: client/gateway/index.html
-    Gateway(GatewayError),
-    /// An error while decoding a payload.
-    Decode(&'static str, Value),
-    /// There was an error with a format.
-    Format(FormatError),
+    /// An error occurred within the core module.
+    Core(CoreError),
     /// An error from the `hyper` crate.
     Hyper(HyperError),
-    /// An `std::io` error.
-    Io(IoError),
-    /// An error from the `serde_json` crate.
-    Json(JsonError),
-    /// Some other error. This is only used for "Expected value <TYPE>" errors,
-    /// when a more detailed error can not be easily provided via the
-    /// [`Error::Decode`] variant.
-    ///
-    /// [`Error::Decode`]: #variant.Decode
-    Other(&'static str),
     /// An error from the `url` crate.
     Url(String),
     /// An error from the `rust-websocket` crate.
     WebSocket(WebSocketError),
+    /// A [rest] or [client] error.
+    ///
+    /// [client]: client/index.html
+    /// [rest]: client/rest/index.html
+    #[cfg(feature="client")]
+    Client(ClientError),
+    /// An error with the WebSocket [`Gateway`].
+    ///
+    /// [`Gateway`]: client/gateway/index.html
+    #[cfg(feature="gateway")]
+    Gateway(GatewayError),
     /// An error from the `opus` crate.
     #[cfg(feature="voice")]
     Opus(OpusError),
@@ -77,13 +71,13 @@ pub enum Error {
 
 impl From<FormatError> for Error {
     fn from(e: FormatError) -> Error {
-        Error::Format(e)
+        Error::Core(CoreError::Format(e))
     }
 }
 
 impl From<IoError> for Error {
     fn from(e: IoError) -> Error {
-        Error::Io(e)
+        Error::Core(CoreError::Io(e))
     }
 }
 
@@ -95,7 +89,7 @@ impl From<HyperError> for Error {
 
 impl From<JsonError> for Error {
     fn from(e: JsonError) -> Error {
-        Error::Json(e)
+        Error::Core(CoreError::Json(e))
     }
 }
 
@@ -116,8 +110,6 @@ impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Error::Hyper(ref inner) => inner.fmt(f),
-            Error::Io(ref inner) => inner.fmt(f),
-            Error::Json(ref inner) => inner.fmt(f),
             Error::WebSocket(ref inner) => inner.fmt(f),
             #[cfg(feature="voice")]
             Error::Opus(ref inner) => inner.fmt(f),
@@ -129,15 +121,14 @@ impl Display for Error {
 impl StdError for Error {
     fn description(&self) -> &str {
         match *self {
-            Error::Client(_) => "Client refused a request",
-            Error::Decode(msg, _) | Error::Other(msg) => msg,
-            Error::Format(ref inner) => inner.description(),
-            Error::Gateway(ref _inner) => "Gateway error",
+            Error::Core(ref inner) => inner.description(),
             Error::Hyper(ref inner) => inner.description(),
-            Error::Io(ref inner) => inner.description(),
-            Error::Json(ref inner) => inner.description(),
             Error::Url(ref inner) => inner,
             Error::WebSocket(ref inner) => inner.description(),
+            #[cfg(feature="client")]
+            Error::Client(_) => "Error performing client action",
+            #[cfg(feature="gateway")]
+            Error::Gateway(ref _inner) => "Gateway error",
             #[cfg(feature="voice")]
             Error::Opus(ref inner) => inner.description(),
             #[cfg(feature="voice")]
@@ -148,9 +139,7 @@ impl StdError for Error {
     fn cause(&self) -> Option<&StdError> {
         match *self {
             Error::Hyper(ref inner) => Some(inner),
-            Error::Json(ref inner) => Some(inner),
             Error::WebSocket(ref inner) => Some(inner),
-            Error::Io(ref inner) => Some(inner),
             _ => None,
         }
     }

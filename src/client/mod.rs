@@ -21,9 +21,6 @@
 //! [`rest`]: rest/index.html
 //! [Client examples]: struct.Client.html#examples
 
-pub mod gateway;
-pub mod rest;
-
 mod context;
 mod dispatch;
 mod error;
@@ -36,7 +33,7 @@ pub use self::login_type::LoginType;
 
 use self::dispatch::dispatch;
 use self::event_store::EventStore;
-use self::gateway::Shard;
+use super::gateway::Shard;
 use serde_json::builder::ObjectBuilder;
 use std::collections::{BTreeMap, HashMap};
 use std::sync::{Arc, Mutex, RwLock};
@@ -60,12 +57,12 @@ use ::model::event::{
     VoiceServerUpdateEvent,
 };
 use ::model::*;
-
-#[cfg(feature="framework")]
-use ::ext::framework::Framework;
+use ::rest;
 
 #[cfg(feature="cache")]
 use ::ext::cache::Cache;
+#[cfg(feature="framework")]
+use ::ext::framework::Framework;
 
 #[cfg(not(feature="cache"))]
 use ::model::event::{

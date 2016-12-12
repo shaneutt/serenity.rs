@@ -3,8 +3,8 @@ use std::sync::mpsc::{self, Sender as MpscSender};
 use super::{AudioReceiver, AudioSource};
 use super::connection_info::ConnectionInfo;
 use super::{Status as VoiceStatus, Target};
-use ::client::gateway::GatewayStatus;
 use ::constants::VoiceOpCode;
+use ::gateway::GatewayStatus;
 use ::model::{ChannelId, GuildId, UserId, VoiceState};
 use super::threading;
 

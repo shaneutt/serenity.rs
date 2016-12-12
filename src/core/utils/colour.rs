@@ -133,7 +133,7 @@ impl Colour {
         match value {
             Value::U64(v) => Ok(Colour::new(v as u32)),
             Value::I64(v) => Ok(Colour::new(v as u32)),
-            other => Err(Error::Decode("Expected valid colour", other)),
+            other => Err(Error::Core(CoreError::Decode("Expected valid colour", other))),
         }
     }
 

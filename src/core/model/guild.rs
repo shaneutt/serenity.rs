@@ -20,15 +20,14 @@ use ::utils::decode_array;
 use serde_json::builder::ObjectBuilder;
 #[cfg(all(feature="cache", feature = "methods"))]
 use std::mem;
+#[cfg(all(feature="cache", feature="methods"))]
+use ::client::CACHE;
+#[cfg(feature = "methods")]
+use ::rest;
 #[cfg(feature = "methods")]
 use ::utils::builder::{EditGuild, EditRole};
 #[cfg(all(feature="cache", feature="methods"))]
 use ::utils::builder::EditMember;
-#[cfg(feature = "methods")]
-use ::client::rest;
-
-#[cfg(all(feature="cache", feature="methods"))]
-use ::client::CACHE;
 #[cfg(all(feature="cache", feature="methods"))]
 use ::utils::Colour;
 

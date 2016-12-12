@@ -4,9 +4,9 @@ use std::fmt;
 #[cfg(all(feature="cache", feature="methods"))]
 use ::client::CACHE;
 #[cfg(feature="methods")]
-use ::client::rest;
-#[cfg(feature="methods")]
 use ::internal::prelude::*;
+#[cfg(feature="methods")]
+use ::rest;
 
 impl ChannelId {
     /// Search the cache for the channel with the Id.

@@ -47,6 +47,7 @@ pub use self::webhook::*;
 
 use self::utils::*;
 use std::collections::HashMap;
+use super::CoreError;
 use time::Timespec;
 use ::internal::prelude::*;
 use ::utils::{Colour, decode_array};

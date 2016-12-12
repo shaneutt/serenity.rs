@@ -26,15 +26,14 @@ use std::mem;
 use std::path::{Path, PathBuf};
 #[cfg(all(feature="cache", feature="methods"))]
 use super::utils;
-
-#[cfg(feature="methods")]
-use ::utils::builder::{CreateEmbed, CreateInvite, EditChannel};
 #[cfg(all(feature="cache", feature="methods"))]
 use ::client::CACHE;
-#[cfg(all(feature="methods"))]
-use ::client::rest;
 #[cfg(all(feature="cache", feature="methods"))]
 use ::ext::cache::ChannelRef;
+#[cfg(all(feature="methods"))]
+use ::rest;
+#[cfg(feature="methods")]
+use ::utils::builder::{CreateEmbed, CreateInvite, EditChannel};
 
 impl Attachment {
     /// If this attachment is an image, then a tuple of the width and height
@@ -202,8 +201,8 @@ impl Channel {
                 .map(Channel::Private),
             3 => Group::decode(Value::Object(map))
                 .map(Channel::Group),
-            other => Err(Error::Decode("Expected value Channel type",
-                                       Value::U64(other))),
+            other => Err(Error::Core(CoreError::Decode("Expected value Channel type",
+                                                       Value::U64(other)))),
         }
     }
 
@@ -735,7 +734,8 @@ impl PermissionOverwrite {
         let kind = match &*kind {
             "member" => PermissionOverwriteType::Member(UserId(id)),
             "role" => PermissionOverwriteType::Role(RoleId(id)),
-            _ => return Err(Error::Decode("Expected valid PermissionOverwrite type", Value::String(kind))),
+            _ => return Err(Error::Core(CoreError::Decode("Expected valid PermissionOverwrite type",
+                                                          Value::String(kind)))),
         };
 
         Ok(PermissionOverwrite {

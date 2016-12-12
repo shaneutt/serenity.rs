@@ -343,7 +343,7 @@ impl GatewayEvent {
 
         let op = req!(value.get("op").and_then(|x| x.as_u64()));
 
-        match OpCode::from_num(op).ok_or(Error::Client(ClientError::InvalidOpCode))? {
+        match OpCode::from_num(op).ok_or(Error::Core(CoreError::InvalidOpCode))? {
             OpCode::Event => Ok(GatewayEvent::Dispatch(
                 req!(remove(&mut value, "s")?.as_u64()),
                 Event::decode(
@@ -363,7 +363,7 @@ impl GatewayEvent {
                 Ok(GatewayEvent::Hello(interval))
             },
             OpCode::HeartbeatAck => Ok(GatewayEvent::HeartbeatAck),
-            _ => Err(Error::Decode("Unexpected opcode", Value::Object(value))),
+            _ => Err(Error::Core(CoreError::Decode("Unexpected opcode", Value::Object(value)))),
         }
     }
 }
@@ -806,7 +806,7 @@ impl VoiceEvent {
         let mut map = remove(&mut value, "d").and_then(into_map)?;
 
         let opcode = VoiceOpCode::from_num(op)
-            .ok_or(Error::Client(ClientError::InvalidOpCode))?;
+            .ok_or(Error::Core(CoreError::InvalidOpCode))?;
 
         match opcode {
             VoiceOpCode::Heartbeat => {

@@ -5,5 +5,8 @@
 //! private module.
 
 pub use serde_json::Value;
-pub use ::client::ClientError;
+pub use ::core::CoreError;
 pub use ::error::{Error, Result};
+
+#[cfg(feature="client")]
+pub use ::client::ClientError;

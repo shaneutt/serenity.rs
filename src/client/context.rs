@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use std::fmt::Write as FmtWrite;
 use std::io::Read;
 use std::sync::{Arc, Mutex};
-use super::gateway::Shard;
-use super::rest::{self, GuildPagination};
+use ::gateway::Shard;
+use ::rest::{self, GuildPagination};
 use super::login_type::LoginType;
 use typemap::ShareMap;
 use ::utils::builder::{

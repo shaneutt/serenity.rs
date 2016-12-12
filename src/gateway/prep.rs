@@ -8,7 +8,7 @@ use std::sync::mpsc::{
 };
 use std::time::Duration as StdDuration;
 use std::{env, thread};
-use super::super::ClientError;
+use ::client::ClientError;
 use super::{GatewayError, GatewayStatus};
 use time::{self, Duration};
 use websocket::client::request::Url as RequestUrl;

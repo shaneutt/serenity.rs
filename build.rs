@@ -152,8 +152,8 @@ pub enum {} {{", description, name);
         let name = try!(into_string(value));
 
         Self::from_str(&name)
-            .ok_or_else(|| Error::Decode(\"Expected valid {}\",
-                                         Value::String(name)))
+            .ok_or_else(|| Error::Core(CoreError::Decode(\"Expected valid {}\",
+                                                    Value::String(name))))
     }}", name));
             }
 
@@ -207,7 +207,7 @@ pub enum {} {{", description, name);
         into_u64(value)
             .ok()
             .and_then(Self::from_num)
-            .ok_or_else(|| Error::Other(\"Expected valid {}\"))
+            .ok_or_else(|| Error::Core(CoreError::Other(\"Expected valid {}\")))
     }}", name));
             }
 

@@ -1,9 +1,6 @@
 //! A set of utilities to help with common use cases that are not required to
 //! fully use the library.
 
-#[macro_use]
-pub mod macros;
-
 pub mod builder;
 
 mod colour;
@@ -17,6 +14,7 @@ use std::ffi::OsStr;
 use std::fs::File;
 use std::io::Read;
 use std::path::Path;
+use super::CoreError;
 use ::internal::prelude::*;
 use ::model::{EmojiIdentifier, EmojiId};
 
@@ -31,7 +29,7 @@ pub fn decode_array<T, F: Fn(Value) -> Result<T>>(value: Value, f: F) -> Result<
 pub fn into_array(value: Value) -> Result<Vec<Value>> {
     match value {
         Value::Array(v) => Ok(v),
-        value => Err(Error::Decode("Expected array", value)),
+        value => Err(Error::Core(CoreError::Decode("Expected array", value))),
     }
 }
 
