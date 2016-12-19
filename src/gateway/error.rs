@@ -14,6 +14,8 @@ pub enum Error {
     InvalidHandshake,
     /// Failed to reconnect after a number of attempts.
     ReconnectFailure,
+    /// Error while building a url.
+    Url,
 }
 
 impl Display for Error {
@@ -31,6 +33,7 @@ impl Display for Error {
             Error::ReconnectFailure => {
                 f.write_str("Failed to Reconnect")
             },
+            Error::Url => f.write_str("Failed to create Url"),
         }
     }
 }

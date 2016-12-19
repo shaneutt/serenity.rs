@@ -8,7 +8,6 @@ use std::sync::mpsc::{
 };
 use std::time::Duration as StdDuration;
 use std::{env, thread};
-use ::client::ClientError;
 use super::{GatewayError, GatewayStatus};
 use time::{self, Duration};
 use websocket::client::request::Url as RequestUrl;
@@ -18,6 +17,9 @@ use ::constants::{self, OpCode};
 use ::error::{Error, Result};
 use ::internal::ws_impl::{ReceiverExt, SenderExt};
 use ::model::event::{Event, GatewayEvent, ReadyEvent};
+
+#[cfg(feature="client")]
+use ::client::ClientError;
 
 #[inline]
 pub fn parse_ready(event: GatewayEvent,
@@ -84,7 +86,7 @@ pub fn identify_compression(object: ObjectBuilder) -> ObjectBuilder {
 
 pub fn build_gateway_url(base: &str) -> Result<RequestUrl> {
     RequestUrl::parse(&format!("{}?v={}", base, constants::GATEWAY_VERSION))
-        .map_err(|_| Error::Client(ClientError::Gateway))
+        .map_err(|_| Error::Gateway(GatewayError::Url))
 }
 
 pub fn keepalive(interval: u64,

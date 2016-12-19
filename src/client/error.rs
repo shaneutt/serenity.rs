@@ -1,4 +1,3 @@
-use hyper::status::StatusCode;
 use ::model::{ChannelType, Permissions};
 
 /// An error returned from the [`Client`] or the [`Context`], or model instance.
@@ -108,12 +107,6 @@ pub enum Error {
     /// [`ChannelId`]: ../model/struct.ChannelId.html
     /// [`Context`]: struct.Context.html
     NoChannelId,
-    /// When the decoding of a ratelimit header could not be properly decoded
-    /// into an `i64`.
-    RateLimitI64,
-    /// When the decoding of a ratelimit header could not be properly decoded
-    /// from UTF-8.
-    RateLimitUtf8,
     /// When attempting to find a required record from the Cache could not be
     /// found. This is required in methods such as [`Context::edit_role`].
     ///
@@ -136,9 +129,4 @@ pub enum Error {
     /// [`ChannelType`]: ../model/enum.ChannelType.html
     /// [`Context::edit_channel`]: struct.Context.html#method.edit_channel
     UnexpectedChannelType(ChannelType),
-    /// When a status code was unexpectedly received for a request's status.
-    UnexpectedStatusCode(StatusCode),
-    /// When a status is received, but the verification to ensure the response
-    /// is valid does not recognize the status.
-    UnknownStatus(u16),
 }

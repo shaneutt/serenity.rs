@@ -12,7 +12,6 @@ use websocket::message::Message as WsMessage;
 use websocket::result::WebSocketError;
 use websocket::stream::WebSocketStream;
 use websocket::ws::sender::Sender as WsSender;
-use ::client::LoginType;
 use ::constants::OpCode;
 use ::internal::prelude::*;
 use ::internal::ws_impl::{ReceiverExt, SenderExt};
@@ -62,7 +61,6 @@ pub struct Shard {
     current_presence: CurrentPresence,
     keepalive_channel: MpscSender<GatewayStatus>,
     last_sequence: u64,
-    login_type: LoginType,
     session_id: Option<String>,
     shard_info: Option<[u8; 2]>,
     token: String,
@@ -99,8 +97,7 @@ impl Shard {
     /// ```
     pub fn new(base_url: &str,
                token: &str,
-               shard_info: Option<[u8; 2]>,
-               login_type: LoginType)
+               shard_info: Option<[u8; 2]>)
                -> Result<(Shard, ReadyEvent, Receiver<WebSocketStream>)> {
         let url = prep::build_gateway_url(base_url)?;
 
@@ -144,7 +141,6 @@ impl Shard {
                 current_presence: (None, OnlineStatus::Online, false),
                 keepalive_channel: tx.clone(),
                 last_sequence: sequence,
-                login_type: login_type,
                 token: token.to_owned(),
                 session_id: Some(ready.ready.session_id.clone()),
                 shard_info: shard_info,
@@ -156,7 +152,6 @@ impl Shard {
                 current_presence: (None, OnlineStatus::Online, false),
                 keepalive_channel: tx.clone(),
                 last_sequence: sequence,
-                login_type: login_type,
                 token: token.to_owned(),
                 session_id: Some(ready.ready.session_id.clone()),
                 shard_info: shard_info,
@@ -436,10 +431,7 @@ impl Shard {
         for i in 1u64..11u64 {
             let gateway_url = rest::get_gateway()?.url;
 
-            let shard = Shard::new(&gateway_url,
-                                   &self.token,
-                                   self.shard_info,
-                                   self.login_type);
+            let shard = Shard::new(&gateway_url, &self.token, self.shard_info);
 
             if let Ok((shard, ready, receiver_new)) = shard {
                 mem::replace(self, shard).shutdown(&mut receiver)?;

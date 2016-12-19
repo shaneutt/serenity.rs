@@ -46,6 +46,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use std::{str, thread};
+use super::RestError;
 use time;
 use ::internal::prelude::*;
 
@@ -231,9 +232,9 @@ fn get_header(headers: &Headers, header: &str) -> Result<Option<i64>> {
         Some(header) => match str::from_utf8(&header[0]) {
             Ok(v) => match v.parse::<i64>() {
                 Ok(v) => Ok(Some(v)),
-                Err(_why) => Err(Error::Client(ClientError::RateLimitI64)),
+                Err(_) => Err(Error::Rest(RestError::RateLimitI64)),
             },
-            Err(_why) => Err(Error::Client(ClientError::RateLimitUtf8)),
+            Err(_) => Err(Error::Rest(RestError::RateLimitUtf8)),
         },
         None => Ok(None),
     }

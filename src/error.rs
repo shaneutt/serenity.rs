@@ -1,20 +1,22 @@
-use hyper::Error as HyperError;
 use serde_json::Error as JsonError;
-use serde_json::Value;
 use std::io::Error as IoError;
 use std::error::Error as StdError;
 use std::fmt::{self, Display, Error as FormatError};
 use websocket::result::WebSocketError;
 use ::core::CoreError;
 
-#[cfg(feature="client")]
-use ::client::ClientError;
-#[cfg(feature="gateway")]
-use ::gateway::GatewayError;
+#[cfg(feature="rest")]
+use hyper::Error as HyperError;
 #[cfg(feature="voice")]
 use opus::Error as OpusError;
+#[cfg(feature="client")]
+use ::client::ClientError;
 #[cfg(feature="voice")]
 use ::ext::voice::VoiceError;
+#[cfg(feature="gateway")]
+use ::gateway::GatewayError;
+#[cfg(feature="rest")]
+use ::rest::RestError;
 
 /// The common result type between most library functions.
 ///
@@ -42,8 +44,6 @@ pub type Result<T> = ::std::result::Result<T, Error>;
 pub enum Error {
     /// An error occurred within the core module.
     Core(CoreError),
-    /// An error from the `hyper` crate.
-    Hyper(HyperError),
     /// An error from the `url` crate.
     Url(String),
     /// An error from the `rust-websocket` crate.
@@ -59,9 +59,17 @@ pub enum Error {
     /// [`Gateway`]: client/gateway/index.html
     #[cfg(feature="gateway")]
     Gateway(GatewayError),
+    /// An error from the `hyper` crate.
+    #[cfg(feature="rest")]
+    Hyper(HyperError),
     /// An error from the `opus` crate.
     #[cfg(feature="voice")]
     Opus(OpusError),
+    /// An error occurred in the [`rest`] module.
+    ///
+    /// [`rest`]: rest/index.html
+    #[cfg(feature="rest")]
+    Rest(RestError),
     /// Indicating an error within the [voice module].
     ///
     /// [voice module]: ext/voice/index.html
@@ -81,6 +89,7 @@ impl From<IoError> for Error {
     }
 }
 
+#[cfg(feature="rest")]
 impl From<HyperError> for Error {
     fn from(e: HyperError) -> Error {
         Error::Hyper(e)
@@ -109,8 +118,9 @@ impl From<WebSocketError> for Error {
 impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Error::Hyper(ref inner) => inner.fmt(f),
             Error::WebSocket(ref inner) => inner.fmt(f),
+            #[cfg(feature="rest")]
+            Error::Hyper(ref inner) => inner.fmt(f),
             #[cfg(feature="voice")]
             Error::Opus(ref inner) => inner.fmt(f),
             _ => f.write_str(self.description()),
@@ -122,15 +132,18 @@ impl StdError for Error {
     fn description(&self) -> &str {
         match *self {
             Error::Core(ref inner) => inner.description(),
-            Error::Hyper(ref inner) => inner.description(),
             Error::Url(ref inner) => inner,
             Error::WebSocket(ref inner) => inner.description(),
             #[cfg(feature="client")]
             Error::Client(_) => "Error performing client action",
             #[cfg(feature="gateway")]
             Error::Gateway(ref _inner) => "Gateway error",
+            #[cfg(feature="rest")]
+            Error::Hyper(ref inner) => inner.description(),
             #[cfg(feature="voice")]
             Error::Opus(ref inner) => inner.description(),
+            #[cfg(feature="rest")]
+            Error::Rest(_) => "REST error",
             #[cfg(feature="voice")]
             Error::Voice(_) => "Voice error",
         }
@@ -138,8 +151,9 @@ impl StdError for Error {
 
     fn cause(&self) -> Option<&StdError> {
         match *self {
-            Error::Hyper(ref inner) => Some(inner),
             Error::WebSocket(ref inner) => Some(inner),
+            #[cfg(feature="rest")]
+            Error::Hyper(ref inner) => Some(inner),
             _ => None,
         }
     }

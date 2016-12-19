@@ -5,6 +5,9 @@ use std::io::Error as IoError;
 
 #[derive(Debug)]
 pub enum Error {
+    /// An error occurred in the [`client`] module.
+    ///
+    /// [`client`]: client/index.html
     /// An error while decoding a payload.
     Decode(&'static str, Value),
     /// There was an error with a format.

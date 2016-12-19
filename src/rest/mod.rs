@@ -24,13 +24,16 @@
 //! [`Context`]: ../struct.Context.html
 //! [model]: ../../model/index.html
 
+mod error;
 mod ratelimiting;
+
+pub use self::error::Error as RestError;
 
 use hyper::client::{
     Client as HyperClient,
+    Request,
     RequestBuilder,
     Response as HyperResponse,
-    Request,
 };
 use hyper::method::Method;
 use hyper::status::StatusCode;
@@ -1572,9 +1575,9 @@ fn verify(expected_status_code: u16,
         204 => StatusCode::NoContent,
         401 => StatusCode::Unauthorized,
         _ => {
-            let client_error = ClientError::UnknownStatus(expected_status_code);
+            let err = RestError::UnknownStatus(expected_status_code);
 
-            return Err(Error::Client(client_error));
+            return Err(Error::Rest(err));
         },
     };
 
@@ -1589,7 +1592,7 @@ fn verify(expected_status_code: u16,
 
     debug!("Content: {}", s);
 
-    Err(Error::Client(ClientError::UnexpectedStatusCode(response.status)))
+    Err(Error::Rest(RestError::UnexpectedStatusCode(response.status)))
 }
 
 /// Representation of the method of a query to send for the [`get_guilds`]
