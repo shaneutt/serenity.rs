@@ -50,6 +50,10 @@
 //! [`Shard`]: struct.Shard.html
 //! [docs]: https://discordapp.com/developers/docs/topics/gateway#sharding
 
+/// The gateway version used by the library. The gateway URI is retrieved via
+/// the REST API.
+const GATEWAY_VERSION: u8 = 6;
+
 mod error;
 mod prep;
 mod shard;

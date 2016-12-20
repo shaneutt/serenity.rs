@@ -1,13 +1,7 @@
-/// The gateway version used by the library. The gateway URI is retrieved via
-/// the REST API.
-pub const GATEWAY_VERSION: u8 = 6;
 /// The maximum unicode code points allowed within a message by Discord.
 pub const MESSAGE_CODE_LIMIT: u16 = 2000;
-/// The [UserAgent] sent along with every request.
-///
-/// [UserAgent]: ../hyper/header/struct.UserAgent.html
-pub const USER_AGENT: &'static str = concat!("DiscordBot (https://github.com/zeyla/serenity.rs, ", env!("CARGO_PKG_VERSION"), ")");
 
+#[cfg(feature="gateway")]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum OpCode {
     Event,
@@ -26,6 +20,7 @@ pub enum OpCode {
     SyncCall,
 }
 
+#[cfg(feature="gateway")]
 impl OpCode {
     pub fn from_num(num: u64) -> Option<Self> {
         match num {
@@ -67,6 +62,7 @@ impl OpCode {
     }
 }
 
+#[cfg(feature="voice")]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum VoiceOpCode {
     Identify,
@@ -78,6 +74,7 @@ pub enum VoiceOpCode {
     Speaking,
 }
 
+#[cfg(feature="voice")]
 impl VoiceOpCode {
     pub fn from_num(num: u64) -> Option<Self> {
         match num {

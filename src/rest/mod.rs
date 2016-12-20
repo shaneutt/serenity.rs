@@ -24,6 +24,11 @@
 //! [`Context`]: ../struct.Context.html
 //! [model]: ../../model/index.html
 
+/// The [UserAgent] sent along with every request.
+///
+/// [UserAgent]: ../hyper/header/struct.UserAgent.html
+const USER_AGENT: &'static str = concat!("DiscordBot (https://github.com/zeyla/serenity.rs, ", env!("CARGO_PKG_VERSION"), ")");
+
 mod error;
 mod ratelimiting;
 
@@ -47,7 +52,6 @@ use std::default::Default;
 use std::fmt::Write as FmtWrite;
 use std::io::{ErrorKind as IoErrorKind, Read};
 use std::sync::{Arc, Mutex};
-use ::constants;
 use ::internal::prelude::*;
 use ::model::*;
 use ::utils::decode_array;
@@ -1448,7 +1452,7 @@ pub fn send_file<R: Read>(channel_id: u64,
     request.headers_mut()
         .set(header::Authorization(TOKEN.lock().unwrap().clone()));
     request.headers_mut()
-        .set(header::UserAgent(constants::USER_AGENT.to_owned()));
+        .set(header::UserAgent(USER_AGENT.to_owned()));
 
     let mut request = Multipart::from_request(request)?;
 
@@ -1557,7 +1561,7 @@ fn request<'a, F>(route: Route, f: F) -> Result<HyperResponse>
 pub fn retry<'a, F>(f: F) -> HyperResult<HyperResponse>
     where F: Fn() -> RequestBuilder<'a> {
     let req = || f()
-        .header(header::UserAgent(constants::USER_AGENT.to_owned()))
+        .header(header::UserAgent(USER_AGENT.to_owned()))
         .send();
 
     match req() {

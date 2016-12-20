@@ -8,18 +8,15 @@ use std::sync::mpsc::{
 };
 use std::time::Duration as StdDuration;
 use std::{env, thread};
-use super::{GatewayError, GatewayStatus};
+use super::{GATEWAY_VERSION, GatewayError, GatewayStatus};
 use time::{self, Duration};
 use websocket::client::request::Url as RequestUrl;
 use websocket::client::{Receiver, Sender};
 use websocket::stream::WebSocketStream;
-use ::constants::{self, OpCode};
+use ::constants::OpCode;
 use ::error::{Error, Result};
 use ::internal::ws_impl::{ReceiverExt, SenderExt};
 use ::model::event::{Event, GatewayEvent, ReadyEvent};
-
-#[cfg(feature="client")]
-use ::client::ClientError;
 
 #[inline]
 pub fn parse_ready(event: GatewayEvent,
@@ -66,7 +63,7 @@ pub fn identify(token: &str, shard_info: Option<[u8; 2]>) -> Value {
                     .insert("$device", "serenity")
                     .insert("$os", env::consts::OS))
                 .insert("token", token)
-                .insert("v", constants::GATEWAY_VERSION);
+                .insert("v", GATEWAY_VERSION);
 
             if let Some(shard_info) = shard_info {
                 object = object.insert_array("shard", |a| a
@@ -85,7 +82,7 @@ pub fn identify_compression(object: ObjectBuilder) -> ObjectBuilder {
 }
 
 pub fn build_gateway_url(base: &str) -> Result<RequestUrl> {
-    RequestUrl::parse(&format!("{}?v={}", base, constants::GATEWAY_VERSION))
+    RequestUrl::parse(&format!("{}?v={}", base, GATEWAY_VERSION))
         .map_err(|_| Error::Gateway(GatewayError::Url))
 }
 
