@@ -3,7 +3,7 @@ use super::super::utils::*;
 use super::super::*;
 use ::constants::OpCode;
 use ::internal::prelude::*;
-use ::utils::decode_array;
+use ::internal::decode_array;
 
 #[derive(Clone, Debug)]
 pub struct CallCreateEvent {

@@ -1,13 +1,7 @@
 //! A set of utilities to help with common use cases that are not required to
 //! fully use the library.
 
-pub mod builder;
-
-mod colour;
-
 mod message_builder;
-
-pub use self::colour::Colour;
 
 use base64;
 use std::ffi::OsStr;
@@ -19,19 +13,6 @@ use ::internal::prelude::*;
 use ::model::{EmojiIdentifier, EmojiId};
 
 pub use self::message_builder::MessageBuilder;
-
-#[doc(hidden)]
-pub fn decode_array<T, F: Fn(Value) -> Result<T>>(value: Value, f: F) -> Result<Vec<T>> {
-    into_array(value).and_then(|x| x.into_iter().map(f).collect())
-}
-
-#[doc(hidden)]
-pub fn into_array(value: Value) -> Result<Vec<Value>> {
-    match value {
-        Value::Array(v) => Ok(v),
-        value => Err(Error::Core(CoreError::Decode("Expected array", value))),
-    }
-}
 
 /// Retrieves the "code" part of an [invite][`RichInvite`] out of a URL.
 ///

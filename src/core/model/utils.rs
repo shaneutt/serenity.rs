@@ -16,7 +16,7 @@ use super::{
 };
 use ::core::CoreError;
 use ::internal::prelude::*;
-use ::utils::{decode_array, into_array};
+use ::internal::{decode_array, into_array};
 
 #[cfg(all(feature="cache", feature="methods"))]
 use super::permissions::{self, Permissions};

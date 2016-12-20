@@ -1,7 +1,7 @@
 use serde_json::builder::ObjectBuilder;
 use std::mem;
 use super::{Message, Webhook};
-use ::utils::builder::ExecuteWebhook;
+use ::builder::ExecuteWebhook;
 use ::internal::prelude::*;
 use ::rest;
 

@@ -50,7 +50,8 @@ use std::collections::HashMap;
 use super::CoreError;
 use time::Timespec;
 use ::internal::prelude::*;
-use ::utils::{Colour, decode_array};
+use ::internal::decode_array;
+use ::core::Colour;
 
 // All of the enums and structs are imported here. These are built from the
 // build script located at `./build.rs`.

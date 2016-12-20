@@ -53,8 +53,8 @@ use std::fmt::Write as FmtWrite;
 use std::io::{ErrorKind as IoErrorKind, Read};
 use std::sync::{Arc, Mutex};
 use ::internal::prelude::*;
+use ::internal::decode_array;
 use ::model::*;
-use ::utils::decode_array;
 
 lazy_static! {
     static ref TOKEN: Arc<Mutex<String>> = Arc::new(Mutex::new(String::default()));

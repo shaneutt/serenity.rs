@@ -10,7 +10,7 @@ use super::{
     User,
 };
 use ::internal::prelude::*;
-use ::utils::decode_array;
+use ::internal::decode_array;
 use ::model::misc::Mentionable;
 
 #[cfg(feature="methods")]
@@ -28,7 +28,7 @@ use time::Timespec;
 #[cfg(feature="methods")]
 use ::rest::{self, GuildPagination};
 #[cfg(feature="methods")]
-use ::utils::builder::EditProfile;
+use ::builder::EditProfile;
 
 #[cfg(all(feature="cache", feature="client"))]
 use ::client::CACHE;

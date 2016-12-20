@@ -10,7 +10,7 @@ use super::utils::{
 use super::*;
 use ::constants;
 use ::internal::prelude::*;
-use ::utils::decode_array;
+use ::internal::decode_array;
 
 #[cfg(feature="methods")]
 use hyper::Client as HyperClient;
@@ -33,7 +33,7 @@ use ::ext::cache::ChannelRef;
 #[cfg(all(feature="methods"))]
 use ::rest;
 #[cfg(feature="methods")]
-use ::utils::builder::{CreateEmbed, CreateInvite, EditChannel};
+use ::builder::{CreateEmbed, CreateInvite, EditChannel};
 
 impl Attachment {
     /// If this attachment is an image, then a tuple of the width and height

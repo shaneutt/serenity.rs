@@ -12,15 +12,14 @@ repository = "https://github.com/zeyla/serenity.rs.git"
 version = "0.2.0"
 
 [dependencies]
-base64 = "0.2"
 bitflags = "0.7"
-flate2 = "0.2"
-lazy_static = "0.2"
 log = "0.3"
 serde_json = "0.8"
 time = "0.1"
-typemap = "0.3"
-websocket = "0.17"
+
+[dependencies.base64]
+optional = true
+version = "0.2"
 
 [dependencies.byteorder]
 optional = true
@@ -31,9 +30,17 @@ default-features = false
 optional = true
 version = "0.2"
 
+[dependencies.flate2]
+optional = true
+version = "0.2"
+
 [dependencies.hyper]
 optional = true
 version = "0.9"
+
+[dependencies.lazy_static]
+optional = true
+version = "0.2"
 
 [dependencies.multipart]
 default-features = false
@@ -49,16 +56,25 @@ default-features = false
 optional = true
 version = "0.0.12"
 
+[dependencies.typemap]
+optional = true
+version = "0.3"
+
+[dependencies.websocket]
+optional = true
+version = "0.17"
+
 [build-dependencies]
 yaml-rust = "0.3"
 
 [features]
-default = ["cache", "client", "framework", "methods"]
+default = ["cache", "client", "framework", "methods", "utils"]
 cache = []
-client = ["gateway", "rest"]
+client = ["gateway", "lazy_static", "typemap", "rest"]
 debug = []
 framework = ["client"]
-gateway = ["rest"]
+gateway = ["flate2", "rest", "websocket"]
 methods = ["rest"]
-rest = ["cookie", "hyper"]
+rest = ["cookie", "hyper", "lazy_static"]
+utils = ["base64"]
 voice = ["byteorder", "gateway", "opus", "sodiumoxide"]

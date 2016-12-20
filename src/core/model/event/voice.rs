@@ -2,7 +2,7 @@ use super::super::utils::*;
 use super::super::*;
 use ::constants::VoiceOpCode;
 use ::internal::prelude::*;
-use ::utils::decode_array;
+use ::internal::decode_array;
 
 #[derive(Clone, Copy, Debug)]
 pub struct VoiceHeartbeat {

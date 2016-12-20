@@ -3,8 +3,8 @@ use std::sync::Arc;
 use std::fmt::Write;
 use super::{Command, CommandGroup};
 use ::client::Context;
+use ::core::Colour;
 use ::model::Message;
-use ::utils::Colour;
 
 fn error_embed(ctx: &Context, message: &Message, input: &str) {
     let _ = ctx.send_message(message.channel_id, |m| m

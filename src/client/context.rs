@@ -7,7 +7,7 @@ use ::gateway::Shard;
 use ::rest::{self, GuildPagination};
 use super::login_type::LoginType;
 use typemap::ShareMap;
-use ::utils::builder::{
+use ::builder::{
     CreateEmbed,
     CreateInvite,
     CreateMessage,

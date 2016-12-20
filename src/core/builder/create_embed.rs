@@ -20,8 +20,8 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 use std::default::Default;
 use time::Tm;
+use ::core::Colour;
 use ::model::Embed;
-use ::utils::Colour;
 
 /// A builder to create a fake [`Embed`] object, for use with the
 /// [`Context::send_message`] and [`ExecuteWebhook::embeds`] methods.

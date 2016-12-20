@@ -150,26 +150,32 @@
 #[macro_use]
 extern crate bitflags;
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate log;
 
-extern crate base64;
-extern crate flate2;
+#[cfg(any(feature="client", feature="rest"))]
+#[macro_use]
+extern crate lazy_static;
+
 extern crate multipart;
 extern crate serde_json;
 extern crate time;
-extern crate typemap;
-extern crate websocket;
 
+#[cfg(feature="utils")]
+extern crate base64;
 #[cfg(feature="byteorder")]
 extern crate byteorder;
+#[cfg(feature="gateway")]
+extern crate flate2;
 #[cfg(feature="rest")]
 extern crate hyper;
 #[cfg(feature="voice")]
 extern crate opus;
 #[cfg(feature="voice")]
 extern crate sodiumoxide;
+#[cfg(feature="client")]
+extern crate typemap;
+#[cfg(feature="gateway")]
+extern crate websocket;
 
 #[macro_use]
 mod internal;
@@ -184,12 +190,14 @@ pub mod ext;
 pub mod gateway;
 #[cfg(feature="rest")]
 pub mod rest;
+#[cfg(feature="utils")]
+pub mod utils;
 
 mod constants;
 mod core;
 mod error;
 
-pub use core::{CoreError, model, utils};
+pub use core::{CoreError, builder, model};
 pub use error::{Error, Result};
 
 #[cfg(feature="client")]

@@ -28,6 +28,7 @@ macro_rules! cdn {
         concat!("https://cdn.discordapp.com", $e)
     }
 }
+
 macro_rules! api {
     ($e:expr) => {
         concat!("https://discordapp.com/api/v6", $e)

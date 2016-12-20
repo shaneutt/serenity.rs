@@ -13,6 +13,8 @@ use super::{
 use ::internal::prelude::*;
 use std::str::FromStr;
 use std::result::Result as StdResult;
+
+#[cfg(feature="utils")]
 use ::utils;
 
 /// Allows something - such as a channel or role - to be mentioned in a message.
@@ -78,7 +80,7 @@ impl Mentionable for User {
     }
 }
 
-#[cfg(all(feature="cache", feature="methods"))]
+#[cfg(all(feature="cache", feature="methods", feature="utils"))]
 impl FromStr for User {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {
@@ -94,6 +96,7 @@ impl FromStr for User {
     }
 }
 
+#[cfg(feature="utils")]
 impl FromStr for UserId {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {
@@ -101,7 +104,7 @@ impl FromStr for UserId {
     }
 }
 
-#[cfg(all(feature="cache", feature="methods"))]
+#[cfg(all(feature="cache", feature="methods", feature="utils"))]
 impl FromStr for Role {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {
@@ -117,6 +120,7 @@ impl FromStr for Role {
     }
 }
 
+#[cfg(feature="utils")]
 impl FromStr for RoleId {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {
@@ -133,6 +137,7 @@ impl EmojiIdentifier {
     }
 }
 
+#[cfg(feature="utils")]
 impl FromStr for EmojiIdentifier {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {
@@ -140,6 +145,7 @@ impl FromStr for EmojiIdentifier {
     }
 }
 
+#[cfg(feature="utils")]
 impl FromStr for ChannelId {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {
@@ -147,7 +153,7 @@ impl FromStr for ChannelId {
     }
 }
 
-#[cfg(all(feature="cache", feature="methods"))]
+#[cfg(all(feature="cache", feature="methods", feature="utils"))]
 impl FromStr for Channel {
     type Err = ();
     fn from_str(s: &str) -> StdResult<Self, ()> {

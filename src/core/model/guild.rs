@@ -14,7 +14,7 @@ use super::utils::{
 };
 use super::*;
 use ::internal::prelude::*;
-use ::utils::decode_array;
+use ::internal::decode_array;
 
 #[cfg(feature="methods")]
 use serde_json::builder::ObjectBuilder;
@@ -22,14 +22,14 @@ use serde_json::builder::ObjectBuilder;
 use std::mem;
 #[cfg(all(feature="cache", feature="methods"))]
 use ::client::CACHE;
-#[cfg(feature = "methods")]
+#[cfg(all(feature="cache", feature="methods"))]
+use ::core::Colour;
+#[cfg(feature="methods")]
 use ::rest;
-#[cfg(feature = "methods")]
-use ::utils::builder::{EditGuild, EditRole};
+#[cfg(feature="methods")]
+use ::builder::{EditGuild, EditRole};
 #[cfg(all(feature="cache", feature="methods"))]
-use ::utils::builder::EditMember;
-#[cfg(all(feature="cache", feature="methods"))]
-use ::utils::Colour;
+use ::builder::EditMember;
 
 impl From<PartialGuild> for GuildContainer {
     fn from(guild: PartialGuild) -> GuildContainer {
