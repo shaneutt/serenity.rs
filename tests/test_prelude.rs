@@ -1,4 +1,8 @@
+#![allow(unused_imports)]
+
 extern crate serenity;
 
-#[allow(unused_imports)]
-use serenity::prelude::{Client, ClientError, SerenityError, Mentionable};
+use serenity::prelude::{SerenityError, Mentionable};
+
+#[cfg(feature="client")]
+use serenity::prelude::{Client, ClientError};

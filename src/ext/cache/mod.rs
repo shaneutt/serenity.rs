@@ -81,7 +81,7 @@ use std::collections::HashMap;
 use std::default::Default;
 use std::mem;
 use ::model::*;
-use ::model::event::*;
+use ::model::event::gateway::*;
 
 /// A cache of all events received over a [`Connection`], where storing at least
 /// some data from the event is possible.

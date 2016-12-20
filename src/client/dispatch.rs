@@ -5,7 +5,7 @@ use super::login_type::LoginType;
 use super::Context;
 use typemap::ShareMap;
 use ::gateway::Shard;
-use ::model::event::Event;
+use ::model::event::gateway::Event;
 use ::model::{ChannelId, Message};
 
 #[cfg(feature="framework")]

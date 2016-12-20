@@ -26,7 +26,7 @@ use websocket::stream::WebSocketStream;
 use ::internal::prelude::*;
 use ::internal::ws_impl::{ReceiverExt, SenderExt};
 use ::internal::Timer;
-use ::model::event::VoiceEvent;
+use ::model::event::voice::VoiceEvent;
 use ::model::UserId;
 
 enum ReceiverStatus {

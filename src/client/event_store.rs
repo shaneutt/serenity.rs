@@ -2,7 +2,7 @@ use serde_json::Value;
 use std::collections::{BTreeMap, HashMap};
 use std::sync::Arc;
 use super::context::Context;
-use ::model::event::{
+use ::model::event::gateway::{
     ChannelPinsAckEvent,
     ChannelPinsUpdateEvent,
     GuildSyncEvent,

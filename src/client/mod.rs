@@ -44,7 +44,7 @@ use websocket::client::Receiver;
 use websocket::stream::WebSocketStream;
 use ::internal::prelude::{Error, Result, Value};
 use ::internal::ws_impl::ReceiverExt;
-use ::model::event::{
+use ::model::event::gateway::{
     ChannelPinsAckEvent,
     ChannelPinsUpdateEvent,
     Event,
