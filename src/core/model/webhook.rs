@@ -33,7 +33,7 @@ impl Webhook {
     /// Editing a webhook's name:
     ///
     /// ```rust,no_run
-    /// use serenity::client::rest;
+    /// use serenity::rest;
     ///
     /// let id = 245037420704169985;
     /// let token = "ig5AO-wdVWpCBtUUMxmgsWryqgsW3DChbKYOINftJ4DCrUbnkedoYZD0VOH1QLr-S3sV";
@@ -47,7 +47,7 @@ impl Webhook {
     /// Setting a webhook's avatar:
     ///
     /// ```rust,no_run
-    /// use serenity::client::rest;
+    /// use serenity::rest;
     ///
     /// let id = 245037420704169985;
     /// let token = "ig5AO-wdVWpCBtUUMxmgsWryqgsW3DChbKYOINftJ4DCrUbnkedoYZD0VOH1QLr-S3sV";
@@ -106,7 +106,7 @@ impl Webhook {
     /// Execute a webhook with message content of `test`:
     ///
     /// ```rust,no_run
-    /// use serenity::client::rest;
+    /// use serenity::rest;
     ///
     /// let id = 245037420704169985;
     /// let token = "ig5AO-wdVWpCBtUUMxmgsWryqgsW3DChbKYOINftJ4DCrUbnkedoYZD0VOH1QLr-S3sV";
@@ -121,7 +121,7 @@ impl Webhook {
     /// username to `serenity`, and sending an embed:
     ///
     /// ```rust,no_run
-    /// use serenity::client::rest;
+    /// use serenity::rest;
     /// use serenity::model::Embed;
     ///
     /// let id = 245037420704169985;

@@ -94,8 +94,7 @@ pub fn set_token(token: &str) {
 /// Accept an invite given a code from a URL:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
-/// use serenity::utils;
+/// use serenity::{rest, utils};
 ///
 /// let url = "https://discord.gg/0cDvIgU2voY8RSYL";
 /// let code = utils::parse_invite(url);
@@ -486,7 +485,7 @@ pub fn delete_messages(channel_id: u64, map: Value) -> Result<()> {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
+/// use serenity::rest;
 /// use serenity::model::{ChannelId, MessageId};
 ///
 /// let channel_id = ChannelId(7);
@@ -554,7 +553,8 @@ pub fn delete_role(guild_id: u64, role_id: u64) -> Result<()> {
 /// Deletes a webhook given its Id:
 ///
 /// ```rust,no_run
-/// use serenity::client::{Client, rest};
+/// use serenity::client::Client;
+/// use serenity::rest;
 /// use std::env;
 ///
 /// // Due to the `delete_webhook` function requiring you to authenticate, you
@@ -579,7 +579,7 @@ pub fn delete_webhook(webhook_id: u64) -> Result<()> {
 /// Deletes a webhook given its Id and unique token:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
+/// use serenity::rest;
 ///
 /// let id = 245037420704169985;
 /// let token = "ig5AO-wdVWpCBtUUMxmgsWryqgsW3DChbKYOINftJ4DCrUbnkedoYZD0VOH1QLr-S3sV";
@@ -960,7 +960,7 @@ pub fn get_channel_invites(channel_id: u64)
 /// Retrieve all of the webhooks owned by a channel:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
+/// use serenity::rest;
 ///
 /// let channel_id = 81384788765712384;
 ///
@@ -1143,7 +1143,7 @@ pub fn get_guild_roles(guild_id: u64) -> Result<Vec<Role>> {
 /// Retrieve all of the webhooks owned by a guild:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
+/// use serenity::rest;
 ///
 /// let guild_id = 81384788765712384;
 ///
@@ -1172,8 +1172,8 @@ pub fn get_guild_webhooks(guild_id: u64) -> Result<Vec<Webhook>> {
 /// Get the first 10 guilds after a certain guild's Id:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest::{GuildPagination, get_guilds};
 /// use serenity::model::GuildId;
+/// use serenity::rest::{GuildPagination, get_guilds};
 ///
 /// let guild_id = GuildId(81384788765712384);
 ///
@@ -1351,7 +1351,7 @@ pub fn get_voice_regions() -> Result<Vec<VoiceRegion>> {
 /// Retrieve a webhook by Id:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
+/// use serenity::rest;
 ///
 /// let id = 245037420704169985;
 /// let webhook = rest::get_webhook(id).expect("Error getting webhook");
@@ -1373,7 +1373,7 @@ pub fn get_webhook(webhook_id: u64) -> Result<Webhook> {
 /// Retrieve a webhook by Id and its unique token:
 ///
 /// ```rust,no_run
-/// use serenity::client::rest;
+/// use serenity::rest;
 ///
 /// let id = 245037420704169985;
 /// let token = "ig5AO-wdVWpCBtUUMxmgsWryqgsW3DChbKYOINftJ4DCrUbnkedoYZD0VOH1QLr-S3sV";
