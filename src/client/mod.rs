@@ -781,9 +781,8 @@ impl Client {
 
         for i in 0..shard_data.map_or(1, |x| x[1] + 1) {
             let shard = Shard::new(&gateway_url,
-                                        &self.token,
-                                        shard_data.map(|s| [i, s[2]]),
-                                        self.login_type);
+                                   &self.token,
+                                   shard_data.map(|s| [i, s[2]]));
             match shard {
                 Ok((shard, ready, receiver)) => {
                     self.shards.push(Arc::new(Mutex::new(shard)));
